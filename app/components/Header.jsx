@@ -1,12 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "./ui/colors";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const items = ["Features", "Pricing", "Exams", "Support"];
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <header className="bg-white shadow-md relative z-50">
@@ -106,9 +115,21 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Backdrop (click to close) */}
+        <div
+          className="fixed inset-0 bg-black z-40"
+          style={{
+            opacity: open ? 0.4 : 0,
+            transition: "opacity 200ms ease",
+            pointerEvents: open ? "auto" : "none",
+          }}
+          aria-hidden={!open}
+          onClick={() => setOpen(false)}
+        />
+
         {/* Mobile menu panel (animated, overlays content) */}
         <div
-          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden"
+          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden z-50"
           style={{
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
