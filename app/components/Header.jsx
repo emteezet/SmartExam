@@ -9,11 +9,21 @@ const Header = () => {
   const items = ["Features", "Pricing", "Exams", "Support"];
 
   useEffect(() => {
-    if (!open) return;
     const onKey = (e) => {
       if (e.key === "Escape") setOpen(false);
     };
-    window.addEventListener("keydown", onKey);
+
+    // When menu opens, add ESC handler and lock body scroll
+    if (open) {
+      const prevOverflow = document.body.style.overflow;
+      window.addEventListener("keydown", onKey);
+      document.body.style.overflow = "hidden";
+      return () => {
+        window.removeEventListener("keydown", onKey);
+        document.body.style.overflow = prevOverflow || "";
+      };
+    }
+    // cleanup if effect runs when not open
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
@@ -133,7 +143,9 @@ const Header = () => {
           style={{
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
-            transition: "max-height 300ms ease, opacity 200ms ease",
+            transform: open ? "translateY(0)" : "translateY(-6px)",
+            transition: "max-height 300ms ease, opacity 200ms ease, transform 200ms ease",
+            willChange: "transform, opacity",
           }}
           aria-hidden={!open}
         >
