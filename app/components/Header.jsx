@@ -161,7 +161,7 @@ const Header = () => {
                 <Link
                   key={item}
                   href="/exam"
-                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 transition duration-150`}
+                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 hover:underline underline-offset-4 transition duration-200 ease-in-out`}
                 >
                   {item}
                 </Link>
@@ -169,7 +169,7 @@ const Header = () => {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 transition duration-150`}
+                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 hover:underline underline-offset-4 transition duration-200 ease-in-out`}
                 >
                   {item}
                 </a>
@@ -223,7 +223,6 @@ const Header = () => {
           }}
           aria-hidden={!open}
         >
-        
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
               item === "Exams" ? (
