@@ -106,49 +106,55 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu panel */}
-        {open && (
-          <div className="md:hidden mt-2 pb-4">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              {items.map((item) =>
-                item === "Exams" ? (
-                  <Link
-                    key={item}
-                    href="/exam"
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    {item}
-                  </Link>
-                ) : (
-                  <a
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    {item}
-                  </a>
-                )
-              )}
+        {/* Mobile menu panel (animated) */}
+        <div
+          className="md:hidden mt-2 pb-4 overflow-hidden"
+          style={{
+            maxHeight: open ? "600px" : "0px",
+            opacity: open ? 1 : 0,
+            transition: "max-height 300ms ease, opacity 200ms ease",
+          }}
+          aria-hidden={!open}
+        >
+          <div className="space-y-1 px-2 pt-2 pb-3">
+            {items.map((item) =>
+              item === "Exams" ? (
+                <Link
+                  key={item}
+                  href="/exam"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </Link>
+              ) : (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </a>
+              )
+            )}
 
-              <Link
-                href="/signin"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
-                onClick={() => setOpen(false)}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                className={`block mt-1 px-3 py-2 rounded-md text-base font-medium text-white ${ACCENT_BG} ${ACCENT_BG_HOVER}`}
-                onClick={() => setOpen(false)}
-              >
-                Register
-              </Link>
-            </div>
+            <Link
+              href="/signin"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+              onClick={() => setOpen(false)}
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className={`block mt-1 px-3 py-2 rounded-md text-base font-medium text-white ${ACCENT_BG} ${ACCENT_BG_HOVER}`}
+              onClick={() => setOpen(false)}
+            >
+              Register
+            </Link>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
