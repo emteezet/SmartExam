@@ -146,12 +146,17 @@ const Support = () => {
             {/* Contact Methods */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {contactMethods.map((method, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow p-6 text-center">
+                <div
+                  key={idx}
+                  className="bg-white rounded-lg shadow p-6 text-center"
+                >
                   <div className="text-4xl mb-3">{method.icon}</div>
                   <h3 className={`text-lg font-semibold ${PRIMARY_TEXT} mb-2`}>
                     {method.title}
                   </h3>
-                  <p className="text-gray-700 font-medium mb-1">{method.details}</p>
+                  <p className="text-gray-700 font-medium mb-1">
+                    {method.details}
+                  </p>
                   <p className="text-gray-500 text-sm">{method.description}</p>
                 </div>
               ))}

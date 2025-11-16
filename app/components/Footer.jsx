@@ -18,7 +18,7 @@ const Footer = () => (
         ))}
       </nav>
       <p className="mt-8 text-center text-base text-gray-400">
-        &copy; {new Date().getFullYear()} CBT Exam Portal. All rights reserved.
+        &copy; {new Date().getFullYear()} SmartExam. All rights reserved.
       </p>
     </div>
   </footer>
