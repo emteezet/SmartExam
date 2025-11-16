@@ -193,10 +193,11 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Backdrop (click to close) */}
+        {/* Backdrop (click to close) - starts below header so header isn't blurred */}
         <div
-          className="fixed inset-0 bg-black backdrop-blur-md z-40"
+          className="fixed left-0 right-0 bottom-0 bg-black backdrop-blur-md z-40"
           style={{
+            top: menuTop ? `${menuTop}px` : "0px",
             opacity: open ? 0.5 : 0,
             transition: "opacity 200ms ease",
             pointerEvents: open ? "auto" : "none",
@@ -222,6 +223,16 @@ const Header = () => {
           }}
           aria-hidden={!open}
         >
+          {/* In-menu close button (visible inside the menu) */}
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="absolute top-2 right-3 inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
               item === "Exams" ? (
