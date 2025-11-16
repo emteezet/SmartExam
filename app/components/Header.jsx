@@ -9,7 +9,7 @@ const Header = () => {
   const items = ["Features", "Pricing", "Exams", "Support"];
 
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-white shadow-md relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -106,9 +106,9 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu panel (animated) */}
+        {/* Mobile menu panel (animated, overlays content) */}
         <div
-          className="md:hidden mt-2 pb-4 overflow-hidden"
+          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden"
           style={{
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
