@@ -223,16 +223,7 @@ const Header = () => {
           }}
           aria-hidden={!open}
         >
-          {/* In-menu close button (visible inside the menu) */}
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="Close menu"
-            className="absolute top-2 right-3 inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
               item === "Exams" ? (
