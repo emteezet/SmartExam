@@ -8,6 +8,8 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const items = ["Features", "Pricing", "Exams", "Support"];
   const menuRef = useRef(null);
+  const headerRef = useRef(null);
+  const [menuTop, setMenuTop] = useState(0);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -61,9 +63,25 @@ const Header = () => {
         if (focusable.length) focusable[0].focus();
       });
 
+      // compute menu top offset so the menu is fixed under the header
+      const updateTop = () => {
+        const hdr = headerRef.current;
+        if (hdr) {
+          const rect = hdr.getBoundingClientRect();
+          setMenuTop(rect.bottom + window.scrollY);
+        } else {
+          setMenuTop(0);
+        }
+      };
+      updateTop();
+      window.addEventListener("resize", updateTop);
+      window.addEventListener("scroll", updateTop);
+
       return () => {
         window.removeEventListener("keydown", onKey);
         window.removeEventListener("keydown", onTab);
+        window.removeEventListener("resize", updateTop);
+        window.removeEventListener("scroll", updateTop);
         document.body.style.overflow = prevOverflow || "";
         if (prevActiveElement && prevActiveElement.focus)
           prevActiveElement.focus();
@@ -78,7 +96,7 @@ const Header = () => {
   }, [open]);
 
   return (
-    <header className="bg-white shadow-md relative z-50">
+    <header ref={headerRef} className="bg-white shadow-md relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -187,13 +205,14 @@ const Header = () => {
           onClick={() => setOpen(false)}
         />
 
-        {/* Mobile menu panel (animated, overlays content) */}
+        {/* Mobile menu panel (animated, overlays content) - fixed under header */}
         <div
           ref={menuRef}
           role="dialog"
           aria-modal={open}
-          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden z-50 relative"
+          className="md:hidden fixed left-0 right-0 bg-white shadow-lg overflow-hidden z-50"
           style={{
+            top: menuTop ? `${menuTop}px` : "0px",
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
             transform: open ? "translateY(0)" : "translateY(-12px)",
@@ -203,26 +222,6 @@ const Header = () => {
           }}
           aria-hidden={!open}
         >
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="Close menu"
-            className="absolute top-2 right-3 inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            <svg
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
               item === "Exams" ? (
