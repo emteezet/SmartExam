@@ -1,30 +1,80 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "./ui/colors";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const items = ["Features", "Pricing", "Exams", "Support"];
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") setOpen(false);
     };
 
-    // When menu opens, add ESC handler and lock body scroll
+    // When menu opens, add ESC handler, lock body scroll, and trap focus
+    let prevOverflow;
+    let prevActiveElement = null;
+    const focusableSelector =
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
+    const onTab = (e) => {
+      if (e.key !== "Tab") return;
+      const menu = menuRef.current;
+      if (!menu) return;
+      const focusable = Array.from(
+        menu.querySelectorAll(focusableSelector)
+      ).filter((el) => el.offsetParent !== null);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
     if (open) {
-      const prevOverflow = document.body.style.overflow;
+      prevOverflow = document.body.style.overflow;
+      prevActiveElement = document.activeElement;
       window.addEventListener("keydown", onKey);
+      window.addEventListener("keydown", onTab);
       document.body.style.overflow = "hidden";
+
+      // move focus into the menu
+      requestAnimationFrame(() => {
+        const menu = menuRef.current;
+        if (!menu) return;
+        const focusable = Array.from(
+          menu.querySelectorAll(focusableSelector)
+        ).filter((el) => el.offsetParent !== null);
+        if (focusable.length) focusable[0].focus();
+      });
+
       return () => {
         window.removeEventListener("keydown", onKey);
+        window.removeEventListener("keydown", onTab);
         document.body.style.overflow = prevOverflow || "";
+        if (prevActiveElement && prevActiveElement.focus)
+          prevActiveElement.focus();
       };
     }
+
     // cleanup if effect runs when not open
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keydown", onTab);
+    };
   }, [open]);
 
   return (
@@ -127,7 +177,7 @@ const Header = () => {
 
         {/* Backdrop (click to close) */}
         <div
-          className="fixed inset-0 bg-black z-40"
+          className="fixed inset-0 bg-black backdrop-blur-sm z-40"
           style={{
             opacity: open ? 0.4 : 0,
             transition: "opacity 200ms ease",
@@ -139,12 +189,16 @@ const Header = () => {
 
         {/* Mobile menu panel (animated, overlays content) */}
         <div
+          ref={menuRef}
+          role="dialog"
+          aria-modal={open}
           className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden z-50"
           style={{
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
             transform: open ? "translateY(0)" : "translateY(-6px)",
-            transition: "max-height 300ms ease, opacity 200ms ease, transform 200ms ease",
+            transition:
+              "max-height 300ms ease, opacity 200ms ease, transform 200ms ease",
             willChange: "transform, opacity",
           }}
           aria-hidden={!open}
