@@ -161,7 +161,7 @@ const Header = () => {
                 <Link
                   key={item}
                   href="/exam"
-                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 hover:underline underline-offset-4 transition duration-200 ease-in-out`}
+                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
                 >
                   {item}
                 </Link>
@@ -169,7 +169,7 @@ const Header = () => {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`text-base font-medium text-gray-500 hover:text-indigo-600 hover:underline underline-offset-4 transition duration-200 ease-in-out`}
+                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
                 >
                   {item}
                 </a>
