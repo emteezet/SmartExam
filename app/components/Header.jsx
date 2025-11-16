@@ -165,6 +165,14 @@ const Header = () => {
                 >
                   {item}
                 </Link>
+              ) : item === "Support" ? (
+                <Link
+                  key={item}
+                  href="/support"
+                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
+                >
+                  {item}
+                </Link>
               ) : (
                 <a
                   key={item}
