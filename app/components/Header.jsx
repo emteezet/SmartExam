@@ -177,9 +177,9 @@ const Header = () => {
 
         {/* Backdrop (click to close) */}
         <div
-          className="fixed inset-0 bg-black backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black backdrop-blur-md z-40"
           style={{
-            opacity: open ? 0.4 : 0,
+            opacity: open ? 0.5 : 0,
             transition: "opacity 200ms ease",
             pointerEvents: open ? "auto" : "none",
           }}
@@ -192,17 +192,37 @@ const Header = () => {
           ref={menuRef}
           role="dialog"
           aria-modal={open}
-          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden z-50"
+          className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg overflow-hidden z-50 relative"
           style={{
             maxHeight: open ? "600px" : "0px",
             opacity: open ? 1 : 0,
-            transform: open ? "translateY(0)" : "translateY(-6px)",
+            transform: open ? "translateY(0)" : "translateY(-12px)",
             transition:
               "max-height 300ms ease, opacity 200ms ease, transform 200ms ease",
             willChange: "transform, opacity",
           }}
           aria-hidden={!open}
         >
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="absolute top-2 right-3 inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <svg
+              className="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
               item === "Exams" ? (
