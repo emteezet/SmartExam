@@ -1,7 +1,13 @@
 import React from "react";
 import Link from "next/link";
 
-const ResultsPage = ({ score, totalQuestions, timeLeft, startExamHandler, subject }) => {
+const ResultsPage = ({
+  score,
+  totalQuestions,
+  timeLeft,
+  startExamHandler,
+  subject,
+}) => {
   const percentage = Math.round((score / totalQuestions) * 100);
   const performanceMessage =
     percentage >= 80
@@ -25,8 +31,12 @@ const ResultsPage = ({ score, totalQuestions, timeLeft, startExamHandler, subjec
         <p className="text-7xl font-extrabold text-indigo-800">
           {score} / {totalQuestions}
         </p>
-        <p className="text-2xl font-bold text-emerald-600 mt-4">{percentage}%</p>
-        <p className="text-lg font-semibold text-gray-800 mt-3">{performanceMessage}</p>
+        <p className="text-2xl font-bold text-emerald-600 mt-4">
+          {percentage}%
+        </p>
+        <p className="text-lg font-semibold text-gray-800 mt-3">
+          {performanceMessage}
+        </p>
       </div>
 
       <p className="text-gray-600 mt-8 text-sm max-w-md mx-auto">

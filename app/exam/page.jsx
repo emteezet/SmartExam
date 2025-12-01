@@ -2,7 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "../components/ui/colors";
+import {
+  PRIMARY_TEXT,
+  ACCENT_BG,
+  ACCENT_BG_HOVER,
+} from "../components/ui/colors";
 
 const SubjectSelector = () => {
   const subjects = [
@@ -65,7 +69,8 @@ const SubjectSelector = () => {
             Choose Your Subject
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Select a subject to begin your exam. Each subject contains multiple questions to test your knowledge.
+            Select a subject to begin your exam. Each subject contains multiple
+            questions to test your knowledge.
           </p>
         </div>
 
@@ -92,13 +97,15 @@ const SubjectSelector = () => {
                 {/* Meta Info */}
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <span>📝 {subject.questionCount} Questions</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    subject.difficulty === "Beginner"
-                      ? "bg-green-100 text-green-700"
-                      : subject.difficulty === "Intermediate"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-red-100 text-red-700"
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      subject.difficulty === "Beginner"
+                        ? "bg-green-100 text-green-700"
+                        : subject.difficulty === "Intermediate"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
                     {subject.difficulty}
                   </span>
                 </div>
@@ -122,7 +129,9 @@ const SubjectSelector = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="text-3xl font-bold text-emerald-500 mb-2">1</div>
-              <h3 className="font-semibold text-gray-800 mb-2">Choose Subject</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                Choose Subject
+              </h3>
               <p className="text-gray-600 text-sm">
                 Select from our wide range of subjects to test your knowledge.
               </p>
@@ -131,14 +140,16 @@ const SubjectSelector = () => {
               <div className="text-3xl font-bold text-emerald-500 mb-2">2</div>
               <h3 className="font-semibold text-gray-800 mb-2">Take Exam</h3>
               <p className="text-gray-600 text-sm">
-                Answer questions within the time limit. Each question has multiple choices.
+                Answer questions within the time limit. Each question has
+                multiple choices.
               </p>
             </div>
             <div>
               <div className="text-3xl font-bold text-emerald-500 mb-2">3</div>
               <h3 className="font-semibold text-gray-800 mb-2">Get Results</h3>
               <p className="text-gray-600 text-sm">
-                Receive instant results with your score and performance breakdown.
+                Receive instant results with your score and performance
+                breakdown.
               </p>
             </div>
           </div>

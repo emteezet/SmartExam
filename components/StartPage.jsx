@@ -20,8 +20,8 @@ const StartPage = ({ totalQuestions, startExamHandler, subject }) => {
         {displaySubject} Exam
       </h1>
       <p className="text-gray-600 mb-8">
-        Test your knowledge with <strong>{totalQuestions} questions</strong> and a{" "}
-        <strong>{EXAM_DURATION_SECONDS}-second limit</strong>.
+        Test your knowledge with <strong>{totalQuestions} questions</strong> and
+        a <strong>{EXAM_DURATION_SECONDS}-second limit</strong>.
       </p>
       <div className="bg-blue-50 border-l-4 border-indigo-600 p-4 mb-8 text-left">
         <p className="text-sm text-gray-700">

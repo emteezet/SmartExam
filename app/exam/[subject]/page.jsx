@@ -236,6 +236,12 @@ export default function SubjectExam() {
     }
   };
 
+  const previousQuestionHandler = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
   let content;
   switch (examState) {
     case "exam":
@@ -248,6 +254,7 @@ export default function SubjectExam() {
           selectedAnswer={selectedAnswer}
           selectAnswerHandler={selectAnswerHandler}
           nextQuestionHandler={nextQuestionHandler}
+          previousQuestionHandler={previousQuestionHandler}
           finishExamHandler={finishExam}
         />
       );
