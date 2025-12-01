@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const QuestionOptions = ({ question, selectedAnswer, selectAnswerHandler }) => {
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const key = event.key.toUpperCase();
+      if (["A", "B", "C", "D"].includes(key)) {
+        event.preventDefault();
+        selectAnswerHandler(question.id, key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [question.id, selectAnswerHandler]);
+
   return (
     <div className="space-y-4">
       {question.options.map((option) => {
