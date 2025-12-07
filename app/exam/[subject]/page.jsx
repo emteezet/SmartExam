@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import ExamPage from "../../../components/ExamPage";
-import StartPage from "../../../components/StartPage";
-import ResultsPage from "../../../components/ResultsPage";
+import ExamPage from "../../../components/exam/ExamPage";
+import StartPage from "../../../components/exam/StartPage";
+import ResultsPage from "../../../components/exam/ResultsPage";
 
 // Subject-specific questions database
 const subjectQuestions = {

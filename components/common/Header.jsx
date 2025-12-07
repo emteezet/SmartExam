@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "./ui/colors";
+import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "../ui/colors";
 
 const Header = () => {
   const [open, setOpen] = useState(false);

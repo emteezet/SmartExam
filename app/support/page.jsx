@@ -1,4 +1,4 @@
-import Support from "@/app/components/Support";
+import Support from "@/components/ui/Support";
 
 export const metadata = {
   title: "Support - SmartExam",
