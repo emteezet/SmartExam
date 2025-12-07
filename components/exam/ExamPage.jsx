@@ -127,7 +127,7 @@ const ExamPage = ({
             <button
               key={idx}
               onClick={() => {
-                if (jumpToQuestionHandler && idx !== currentQuestionIndex) {
+                if (jumpToQuestionHandler && idx !== currentQuestionIndex && selectedAnswer) {
                   jumpToQuestionHandler(idx);
                 }
               }}
@@ -136,12 +136,13 @@ const ExamPage = ({
                 ${
                   idx === currentQuestionIndex
                     ? "bg-indigo-600 text-white shadow-lg scale-110"
-                    : idx < currentQuestionIndex
+                    : idx < currentQuestionIndex && selectedAnswer
                     ? "bg-emerald-500 text-white hover:bg-emerald-600 cursor-pointer"
-                    : "bg-gray-300 text-gray-700 hover:bg-gray-400 cursor-pointer"
+                    : "bg-gray-300 text-gray-700 cursor-not-allowed"
                 }
               `}
               title={`Question ${idx + 1}`}
+              disabled={!selectedAnswer || idx === currentQuestionIndex}
             >
               {idx + 1}
             </button>
