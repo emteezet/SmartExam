@@ -4,8 +4,11 @@ import React from "react";
 import Header from "../common/Header";
 import Hero from "./Hero";
 import Features from "./Features";
-import Pricing from "./Pricing";
-import FinalCTA from "./FinalCTA";
+import DifferentiatorSection from "./DifferentiatorSection";
+import ExamCategories from "./ExamCategories";
+import AnalyticsShowcase from "./AnalyticsShowcase";
+import Testimonials from "./Testimonials";
+import FAQSection from "./FAQSection";
 import Footer from "../common/Footer";
 
 const Landing = () => (
@@ -14,8 +17,11 @@ const Landing = () => (
     <main>
       <Hero />
       <Features />
-      <Pricing />
-      <FinalCTA />
+      <DifferentiatorSection />
+      <ExamCategories />
+      <AnalyticsShowcase />
+      <Testimonials />
+      <FAQSection />
     </main>
     <Footer />
   </div>

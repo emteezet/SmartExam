@@ -6,7 +6,7 @@ import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "../ui/colors";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const items = ["Features", "Pricing", "Exams", "Support"];
+  const items = ["Features", "Exams", "Support"];
   const menuRef = useRef(null);
   const headerRef = useRef(null);
   const [menuTop, setMenuTop] = useState(0);
@@ -237,6 +237,15 @@ const Header = () => {
                 <Link
                   key={item}
                   href="/exam"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </Link>
+              ) : item === "Support" ? (
+                <Link
+                  key={item}
+                  href="/support"
                   onClick={() => setOpen(false)}
                   className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
                 >
