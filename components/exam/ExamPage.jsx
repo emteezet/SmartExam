@@ -12,6 +12,7 @@ const ExamPage = ({
   nextQuestionHandler,
   finishExamHandler,
   previousQuestionHandler,
+  jumpToQuestionHandler,
 }) => {
   const [showWarning, setShowWarning] = useState(false);
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
@@ -81,31 +82,70 @@ const ExamPage = ({
         </button>
       </div>
 
-      {/* Timer & Status Bar */}
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-indigo-200">
-        <div className="text-lg font-bold text-gray-700">
-          Question <span>{currentQuestionIndex + 1}</span> of {totalQuestions}
-        </div>
-        <div
-          className={`flex items-center space-x-2 p-2 rounded-lg shadow-inner font-bold transition-colors duration-300 ${
-            timeLeft <= 10
-              ? "bg-red-200 text-red-800 animate-pulse"
-              : "bg-green-100 text-green-700"
-          }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+      {/* Question Pagination */}
+      <div className="mb-8 pb-6 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-lg font-bold text-gray-700">
+            Question <span>{currentQuestionIndex + 1}</span> of {totalQuestions}
+          </div>
+          <div
+            className={`flex items-center space-x-2 p-2 rounded-lg shadow-inner font-bold transition-colors duration-300 ${
+              timeLeft <= 10
+                ? "bg-red-200 text-red-800 animate-pulse"
+                : "bg-green-100 text-green-700"
+            }`}
           >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L11 9.586V6z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span>{timeLeft}s</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L11 9.586V6z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>{timeLeft}s</span>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div
+            className="bg-gradient-to-r from-indigo-600 to-emerald-500 h-full transition-all duration-300"
+            style={{
+              width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`,
+            }}
+          ></div>
+        </div>
+
+        {/* Question numbers pagination */}
+        <div className="mt-6 flex flex-wrap gap-2 justify-center">
+          {Array.from({ length: totalQuestions }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (jumpToQuestionHandler && idx !== currentQuestionIndex) {
+                  jumpToQuestionHandler(idx);
+                }
+              }}
+              className={`
+                h-10 w-10 rounded-lg font-bold transition-all duration-200 text-sm
+                ${
+                  idx === currentQuestionIndex
+                    ? "bg-indigo-600 text-white shadow-lg scale-110"
+                    : idx < currentQuestionIndex
+                    ? "bg-emerald-500 text-white hover:bg-emerald-600 cursor-pointer"
+                    : "bg-gray-300 text-gray-700 hover:bg-gray-400 cursor-pointer"
+                }
+              `}
+              title={`Question ${idx + 1}`}
+            >
+              {idx + 1}
+            </button>
+          ))}
         </div>
       </div>
 

@@ -242,6 +242,12 @@ export default function SubjectExam() {
     }
   };
 
+  const jumpToQuestionHandler = (questionIndex) => {
+    if (questionIndex >= 0 && questionIndex < totalQuestions) {
+      setCurrentQuestionIndex(questionIndex);
+    }
+  };
+
   let content;
   switch (examState) {
     case "exam":
@@ -255,6 +261,7 @@ export default function SubjectExam() {
           selectAnswerHandler={selectAnswerHandler}
           nextQuestionHandler={nextQuestionHandler}
           previousQuestionHandler={previousQuestionHandler}
+          jumpToQuestionHandler={jumpToQuestionHandler}
           finishExamHandler={finishExam}
         />
       );
