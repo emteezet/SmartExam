@@ -9,7 +9,7 @@ import {
   PRIMARY_BG_BORDER,
   ACCENT_BG,
   ACCENT_TEXT,
-} from "./ui/colors";
+} from "../ui/colors";
 
 const Hero = () => (
   <div className="relative overflow-hidden pt-10 sm:pt-16 lg:pt-8 pb-10 md:pb-20 bg-gray-50 bg-opacity-70">

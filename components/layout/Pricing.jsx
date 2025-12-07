@@ -9,7 +9,7 @@ import {
   ACCENT_BG_HOVER,
   PRIMARY_TEXT,
   ACCENT_TEXT,
-} from "./ui/colors";
+} from "../ui/colors";
 
 const PriceCard = ({ title, price, perks, featured }) => (
   <div

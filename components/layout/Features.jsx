@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ChartBar, Smartphone, CheckCircle } from "lucide-react";
-import { PRIMARY_BG, ACCENT_TEXT } from "./ui/colors";
+import { PRIMARY_BG, ACCENT_TEXT } from "../ui/colors";
 
 const FeatureItem = ({ icon: Icon, title, description }) => (
   <div className="relative p-6 bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition duration-300">

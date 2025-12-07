@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { PRIMARY_BG_50, ACCENT_BG, ACCENT_BG_HOVER } from "./ui/colors";
+import { PRIMARY_BG_50, ACCENT_BG, ACCENT_BG_HOVER } from "../ui/colors";
 
 const FinalCTA = () => (
   <div className={PRIMARY_BG_50}>

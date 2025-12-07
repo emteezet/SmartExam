@@ -8,7 +8,7 @@ import {
   PRIMARY_HOVER,
   ACCENT_BG,
   ACCENT_BG_HOVER,
-} from "../../components/ui/colors";
+} from "@/components/ui/colors";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");

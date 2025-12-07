@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "./ui/colors";
+import { PRIMARY_TEXT, ACCENT_BG, ACCENT_BG_HOVER } from "./colors";
 
 const Support = () => {
   const [activeTab, setActiveTab] = useState("faq");

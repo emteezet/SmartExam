@@ -6,7 +6,7 @@ import {
   PRIMARY_TEXT,
   ACCENT_BG,
   ACCENT_BG_HOVER,
-} from "../components/ui/colors";
+} from "@/components/ui/colors";
 
 const SubjectSelector = () => {
   const subjects = [
