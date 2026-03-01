@@ -7,80 +7,72 @@ import StartPage from "../../../components/exam/StartPage";
 import ResultsPage from "../../../components/exam/ResultsPage";
 
 // Subject-specific questions database
+// Subject-specific questions database with multi-type support
 const subjectQuestions = {
   javascript: [
     {
       id: 1,
+      type: "mcq",
       text: "Which keyword is used to declare a variable in JavaScript that cannot be reassigned?",
       options: ["A. let", "B. const", "C. var", "D. static"],
       correctAnswer: "B",
     },
     {
       id: 2,
-      text: "What does 'async' mean in JavaScript?",
-      options: [
-        "A. Asynchronous programming",
-        "B. Automatic synchronization",
-        "C. Async syntax error",
-        "D. None of the above",
-      ],
-      correctAnswer: "A",
+      type: "true_false",
+      text: "JavaScript is a statically typed language.",
+      options: ["True", "False"],
+      correctAnswer: "False",
     },
     {
       id: 3,
-      text: "Which method is used to add elements to the end of an array?",
-      options: ["A. push()", "B. pop()", "C. shift()", "D. unshift()"],
-      correctAnswer: "A",
+      type: "fill_blanks",
+      text: "The _______ method is used to add one or more elements to the end of an array.",
+      correctAnswer: "push",
     },
   ],
   python: [
     {
       id: 1,
+      type: "mcq",
       text: "Which of the following is a mutable data type in Python?",
       options: ["A. String", "B. Tuple", "C. List", "D. None"],
       correctAnswer: "C",
     },
     {
       id: 2,
-      text: "How do you create a function in Python?",
-      options: [
-        "A. function myFunc():",
-        "B. def myFunc():",
-        "C. func myFunc():",
-        "D. define myFunc():",
-      ],
-      correctAnswer: "B",
+      type: "true_false",
+      text: "In Python, Indentation is used to define blocks of code.",
+      options: ["True", "False"],
+      correctAnswer: "True",
     },
     {
       id: 3,
-      text: "What is the output of: print(2 ** 3)?",
-      options: ["A. 6", "B. 8", "C. 5", "D. 9"],
-      correctAnswer: "B",
+      type: "fill_blanks",
+      text: "Python uses the _______ keyword to create a function.",
+      correctAnswer: "def",
     },
   ],
   geography: [
     {
       id: 1,
+      type: "mcq",
       text: "What is the largest continent by area?",
       options: ["A. Africa", "B. Asia", "C. Europe", "D. Antarctica"],
       correctAnswer: "B",
     },
     {
       id: 2,
-      text: "Which country has the most islands?",
-      options: ["A. Norway", "B. Sweden", "C. Finland", "D. Canada"],
-      correctAnswer: "B",
-    },
-    {
-      id: 3,
-      text: "What is the capital of Japan?",
-      options: ["A. Osaka", "B. Tokyo", "C. Kyoto", "D. Hiroshima"],
-      correctAnswer: "B",
+      type: "true_false",
+      text: "The Nile is the longest river in the world.",
+      options: ["True", "False"],
+      correctAnswer: "True",
     },
   ],
   cybersecurity: [
     {
       id: 1,
+      type: "mcq",
       text: "What does 'VPN' stand for?",
       options: [
         "A. Virtual Private Network",
@@ -92,70 +84,40 @@ const subjectQuestions = {
     },
     {
       id: 2,
-      text: "What is a common method to protect against phishing attacks?",
-      options: [
-        "A. Use weak passwords",
-        "B. Enable 2FA",
-        "C. Click suspicious links",
-        "D. Share credentials",
-      ],
-      correctAnswer: "B",
-    },
-    {
-      id: 3,
-      text: "What does 'SSL' provide?",
-      options: [
-        "A. Secure data transmission",
-        "B. File storage",
-        "C. Email filtering",
-        "D. User authentication",
-      ],
-      correctAnswer: "A",
+      type: "fill_blanks",
+      text: "_______ Auth is a security process in which users provide two different authentication factors to verify themselves.",
+      correctAnswer: "Two-Factor",
     },
   ],
   history: [
     {
       id: 1,
+      type: "mcq",
       text: "In which year did World War II end?",
       options: ["A. 1943", "B. 1944", "C. 1945", "D. 1946"],
       correctAnswer: "C",
     },
     {
       id: 2,
-      text: "Who was the first President of the United States?",
-      options: [
-        "A. Thomas Jefferson",
-        "B. George Washington",
-        "C. Benjamin Franklin",
-        "D. John Adams",
-      ],
-      correctAnswer: "B",
-    },
-    {
-      id: 3,
-      text: "The Renaissance began in which country?",
-      options: ["A. France", "B. Germany", "C. Italy", "D. Spain"],
-      correctAnswer: "C",
+      type: "true_false",
+      text: "The Magna Carta was signed in 1215.",
+      options: ["True", "False"],
+      correctAnswer: "True",
     },
   ],
   biology: [
     {
       id: 1,
+      type: "mcq",
       text: "What is the powerhouse of the cell?",
       options: ["A. Nucleus", "B. Mitochondria", "C. Ribosome", "D. Lysosome"],
       correctAnswer: "B",
     },
     {
       id: 2,
-      text: "How many chambers does a human heart have?",
-      options: ["A. 2", "B. 3", "C. 4", "D. 6"],
-      correctAnswer: "C",
-    },
-    {
-      id: 3,
-      text: "What is the basic unit of life?",
-      options: ["A. Atom", "B. Molecule", "C. Cell", "D. Organ"],
-      correctAnswer: "C",
+      type: "fill_blanks",
+      text: "DNA stands for _______ acid.",
+      correctAnswer: "Deoxyribonucleic",
     },
   ],
 };
@@ -187,8 +149,20 @@ export default function SubjectExam() {
     (isTimeUp = false) => {
       let finalScore = 0;
       questions.forEach((q) => {
-        if (userAnswers[q.id] === q.correctAnswer) {
-          finalScore++;
+        const userAnswer = userAnswers[q.id];
+        const correctAnswer = q.correctAnswer;
+
+        if (q.type === "fill_blanks") {
+          if (
+            userAnswer?.toString().trim().toLowerCase() ===
+            correctAnswer.toString().trim().toLowerCase()
+          ) {
+            finalScore++;
+          }
+        } else {
+          if (userAnswer === correctAnswer) {
+            finalScore++;
+          }
         }
       });
       setScore(finalScore);
@@ -254,6 +228,8 @@ export default function SubjectExam() {
       content = (
         <ExamPage
           question={currentQuestion}
+          questions={questions}
+          userAnswers={userAnswers}
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={totalQuestions}
           timeLeft={timeLeft}

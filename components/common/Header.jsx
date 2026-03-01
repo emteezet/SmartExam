@@ -155,21 +155,37 @@ const Header = () => {
             </button>
           </div>
 
-          <nav className="hidden md:flex space-x-10">
+          <nav className="hidden md:flex space-x-6 items-center">
             {items.map((item) =>
-              item === "Exams" ? (
+              item === "Dashboard" ? (
                 <Link
                   key={item}
-                  href="/exam"
-                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
+                  href="/dashboard"
+                  className={`${PRIMARY_TEXT} text-sm font-medium hover:text-indigo-600 transition duration-200`}
                 >
                   {item}
                 </Link>
-              ) : item === "Support" ? (
+              ) : item === "Teacher" ? (
                 <Link
                   key={item}
-                  href="/support"
-                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
+                  href="/teacher"
+                  className={`${PRIMARY_TEXT} text-sm font-medium hover:text-indigo-600 transition duration-200`}
+                >
+                  {item}
+                </Link>
+              ) : item === "Admin" ? (
+                <Link
+                  key={item}
+                  href="/admin"
+                  className={`${PRIMARY_TEXT} text-sm font-medium hover:text-indigo-600 transition duration-200`}
+                >
+                  {item}
+                </Link>
+              ) : item === "Exams" ? (
+                <Link
+                  key={item}
+                  href="/exam"
+                  className={`${PRIMARY_TEXT} text-sm font-medium hover:text-indigo-600 transition duration-200`}
                 >
                   {item}
                 </Link>
@@ -177,7 +193,7 @@ const Header = () => {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className={`${PRIMARY_TEXT} text-base font-medium hover:font-semibold transition duration-200 ease-in-out`}
+                  className={`${PRIMARY_TEXT} text-sm font-medium hover:text-indigo-600 transition duration-200`}
                 >
                   {item}
                 </a>
@@ -233,7 +249,34 @@ const Header = () => {
         >
           <div className="space-y-1 px-2 pt-2 pb-3">
             {items.map((item) =>
-              item === "Exams" ? (
+              item === "Dashboard" ? (
+                <Link
+                  key={item}
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </Link>
+              ) : item === "Teacher" ? (
+                <Link
+                  key={item}
+                  href="/teacher"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </Link>
+              ) : item === "Admin" ? (
+                <Link
+                  key={item}
+                  href="/admin"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  {item}
+                </Link>
+              ) : item === "Exams" ? (
                 <Link
                   key={item}
                   href="/exam"
