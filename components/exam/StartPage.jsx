@@ -24,7 +24,7 @@ const StartPage = ({ totalQuestions, startExamHandler, subject }) => {
         a <strong>{EXAM_DURATION_SECONDS}-second limit</strong>.
       </p>
       <div className="bg-blue-50 border-l-4 border-indigo-600 p-4 mb-8 text-left">
-        <p className="text-sm text-gray-700">
+        <div className="text-sm text-gray-700">
           <strong>Tips:</strong>
           <ul className="list-disc ml-6 mt-2 space-y-1">
             <li>Read questions carefully before answering</li>
@@ -32,7 +32,7 @@ const StartPage = ({ totalQuestions, startExamHandler, subject }) => {
             <li>Answer all questions before time runs out</li>
             <li>Your answers are saved automatically</li>
           </ul>
-        </p>
+        </div>
       </div>
       <button
         onClick={startExamHandler}
