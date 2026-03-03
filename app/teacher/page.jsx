@@ -13,12 +13,42 @@ import {
     AlertCircle,
     Clock,
     Search,
-    Menu
+    Menu,
+    Loader2
 } from "lucide-react";
 import { PRIMARY_TEXT, ACCENT_BG } from "@/components/ui/colors";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import TeacherClassPerformanceChart from "@/components/analytics/TeacherClassPerformanceChart";
 
 const TeacherDashboard = () => {
+    const { user, profile, loading, signOut } = useAuth();
+    const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!loading) {
+            if (!user) {
+                router.push("/auth/login");
+            } else if (profile && profile.role !== "teacher" && profile.role !== "admin") {
+                // Redirect if not teacher or admin
+                router.push("/dashboard");
+            }
+        }
+    }, [user, profile, loading, router]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+            </div>
+        );
+    }
+
+    if (!user) return null;
+
+    const displayName = profile?.full_name || user?.user_metadata?.full_name || "Teacher";
+    const initials = displayName.split(" ").map(n => n[0]).join("").toUpperCase();
     const stats = [
         { label: "Active Students", value: "156", icon: <Users className="w-5 h-5" />, color: "bg-blue-50 text-blue-600" },
         { label: "Exams Created", value: "24", icon: <FileText className="w-5 h-5" />, color: "bg-indigo-50 text-indigo-600" },
@@ -70,24 +100,47 @@ const TeacherDashboard = () => {
                 </div>
 
                 <nav className="space-y-1 flex-1">
-                    <button className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-bold">
-                        <BarChart2 className="w-5 h-5" /> Dashboard
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
-                        <Users className="w-5 h-5" /> Students
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
-                        <FileText className="w-5 h-5" /> My Exams
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
-                        <Settings className="w-5 h-5" /> Settings
-                    </button>
+                    <Link href="/teacher" className="block">
+                        <button className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-bold">
+                            <BarChart2 className="w-5 h-5" /> Dashboard
+                        </button>
+                    </Link>
+                    <div className="relative group/nav">
+                        <Link href="/teacher/students" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <Users className="w-5 h-5" /> Students
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="relative group/nav">
+                        <Link href="/teacher/exams" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <FileText className="w-5 h-5" /> My Exams
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="relative group/nav">
+                        <Link href="/teacher/settings" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <Settings className="w-5 h-5" /> Settings
+                            </button>
+                        </Link>
+                    </div>
                 </nav>
 
                 <div className="bg-slate-900 rounded-2xl p-4 text-white">
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">Teacher Pro</p>
                     <p className="text-sm font-medium mb-3">Upgrade for AI analytics and proctoring.</p>
                     <button className="w-full py-2 bg-indigo-500 rounded-lg text-sm font-bold">Upgrade Now</button>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                    <button
+                        onClick={signOut}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-50 rounded-xl font-bold transition-all"
+                    >
+                        <AlertCircle className="w-5 h-5" /> Sign Out
+                    </button>
                 </div>
             </aside>
 
@@ -111,9 +164,11 @@ const TeacherDashboard = () => {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                             <input type="text" placeholder="Search students..." className="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-100 transition-all text-sm w-64" />
                         </div>
-                        <button className={`${ACCENT_BG} text-white px-4 md:px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 shadow-md text-sm md:text-base`}>
-                            <PlusCircle className="w-5 h-5 font-bold" /> <span className="hidden sm:inline">New Exam</span>
-                        </button>
+                        <Link href="/teacher/exams/create">
+                            <button className={`${ACCENT_BG} text-white px-4 md:px-6 py-2 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 shadow-md text-sm md:text-base`}>
+                                <PlusCircle className="w-5 h-5 font-bold" /> <span className="hidden sm:inline">New Exam</span>
+                            </button>
+                        </Link>
                     </div>
                 </header>
 
@@ -128,6 +183,43 @@ const TeacherDashboard = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* Analytics */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="lg:col-span-2 bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 relative overflow-hidden">
+                        <div className="flex justify-between items-center mb-10">
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-900">Class Performance</h2>
+                                <p className="text-xs text-slate-400 font-medium mt-1 uppercase tracking-widest">Average scores across subjects</p>
+                            </div>
+                            <button className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-tighter hover:bg-indigo-100 transition-all">
+                                Detailed Report
+                            </button>
+                        </div>
+                        <TeacherClassPerformanceChart />
+                    </div>
+                    <div className="bg-indigo-600 p-8 rounded-[32px] shadow-xl shadow-indigo-100 text-white relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700" />
+                        <h3 className="text-lg font-bold mb-2">Proctoring Alerts</h3>
+                        <p className="text-indigo-100 text-xs mb-8 leading-relaxed">3 students were flagged for tab switching in the last hour.</p>
+                        <div className="space-y-4">
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className="flex items-center gap-3 bg-white/10 p-3 rounded-2xl border border-white/10">
+                                    <div className="w-8 h-8 rounded-full bg-rose-400/20 flex items-center justify-center text-rose-200">
+                                        <AlertCircle className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-[10px] font-bold">Student {i}</p>
+                                        <p className="text-[8px] text-indigo-200">2 tab switches detected</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="w-full mt-6 py-3 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-50 transition-all">
+                            View Flags
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

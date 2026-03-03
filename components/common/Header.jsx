@@ -203,13 +203,13 @@ const Header = () => {
 
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             <Link
-              href="/signin"
+              href="/auth/login"
               className={`whitespace-nowrap text-base font-medium ${PRIMARY_TEXT} hover:text-indigo-900 px-4 py-2 transition duration-150`}
             >
               Sign In
             </Link>
             <Link
-              href="/register"
+              href="/auth/signup"
               className={`ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-lg text-base font-medium text-white ${ACCENT_BG} ${ACCENT_BG_HOVER} transition duration-150 transform hover:scale-[1.02]`}
             >
               Register
@@ -307,14 +307,14 @@ const Header = () => {
             )}
 
             <Link
-              href="/signin"
+              href="/auth/login"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
               onClick={() => setOpen(false)}
             >
               Sign In
             </Link>
             <Link
-              href="/register"
+              href="/auth/signup"
               className={`block mt-1 px-3 py-2 rounded-md text-base font-medium text-white ${ACCENT_BG} ${ACCENT_BG_HOVER}`}
               onClick={() => setOpen(false)}
             >

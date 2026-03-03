@@ -34,7 +34,7 @@ const Hero = () => (
           <div className="mt-10 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
-                href="/exam"
+                href="/auth/signup"
                 className={`flex-1 inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-lg shadow-xl text-white ${ACCENT_BG} hover:opacity-90 transition duration-150 transform hover:scale-[1.02]`}
               >
                 Start Practicing Free

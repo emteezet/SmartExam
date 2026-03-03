@@ -15,6 +15,9 @@ const ExamPage = ({
   finishExamHandler,
   previousQuestionHandler,
   jumpToQuestionHandler,
+  tabSwitchCount,
+  showProctorWarning,
+  onCloseProctorWarning,
 }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [showSubmitWarning, setShowSubmitWarning] = useState(false);
@@ -28,7 +31,8 @@ const ExamPage = ({
     .filter((idx) => idx !== null);
 
   const handleSubmitAttempt = () => {
-    if (unansweredIndices.length > 0) {
+    const hasFlagged = Object.values(flaggedQuestions).some(v => v);
+    if (unansweredIndices.length > 0 || hasFlagged) {
       setShowSubmitWarning(true);
     } else {
       finishExamHandler(false);
@@ -84,61 +88,58 @@ const ExamPage = ({
         </div>
       )}
 
-      {/* Submission Warning Modal (Unanswered Questions) */}
+      {/* Proctor Warning Modal (Tab Switch) */}
+      {showProctorWarning && (
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-[60]">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm mx-4 border-2 border-red-500 text-center">
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">WARNING!</h3>
+            <p className="text-slate-500 font-medium mb-8">
+              Tab switching is strictly prohibited. You have switched tabs <span className="text-red-600 font-bold">{tabSwitchCount} times</span>.
+              On the 3rd attempt, your exam will be auto-submitted.
+            </p>
+            <button
+              onClick={onCloseProctorWarning}
+              className="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-all shadow-lg"
+            >
+              I Understand
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Submission Warning Modal (Unanswered/Flagged Questions) */}
       {showSubmitWarning && (
         <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4 border border-orange-100">
-            <div className="flex items-center mb-4 text-orange-600">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 mr-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
+          <div className="bg-white rounded-[32px] shadow-2xl p-10 max-w-md mx-4 border border-slate-100">
+            <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6 text-orange-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <h3 className="text-xl font-bold">Unanswered Questions</h3>
             </div>
-            <p className="text-gray-600 mb-6 font-medium">
-              You have {unansweredIndices.length} questions left unanswered. What would you like to do?
+
+            <h3 className="text-2xl font-black text-slate-900 text-center mb-2">Review Required</h3>
+            <p className="text-slate-500 text-center mb-8 font-medium">
+              {unansweredIndices.length > 0 && `You have ${unansweredIndices.length} unanswered questions. `}
+              {Object.values(flaggedQuestions).filter(v => v).length > 0 && `You have ${Object.values(flaggedQuestions).filter(v => v).length} questions flagged for review.`}
             </p>
 
-            <div className="mb-8 overflow-y-auto max-h-40 p-2 bg-slate-50 rounded-xl">
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2 px-2">Jump to:</p>
-              <div className="flex flex-wrap gap-2">
-                {unansweredIndices.map((idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      jumpToQuestionHandler(idx);
-                      setShowSubmitWarning(false);
-                    }}
-                    className="h-10 w-10 bg-white border-2 border-orange-200 text-orange-600 rounded-lg font-bold hover:bg-orange-50 hover:border-orange-400 transition-all"
-                  >
-                    {idx + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
+            <div className="space-y-4">
               <button
                 onClick={() => finishExamHandler(false)}
-                className="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition duration-200 shadow-lg"
+                className="w-full bg-slate-900 text-white font-bold py-5 rounded-2xl hover:bg-slate-800 transition-all shadow-xl shadow-slate-200"
               >
                 Submit Anyway
               </button>
               <button
                 onClick={() => setShowSubmitWarning(false)}
-                className="w-full bg-white border-2 border-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-50 transition duration-200"
+                className="w-full bg-white border-2 border-slate-100 text-slate-400 font-bold py-5 rounded-2xl hover:bg-slate-50 transition-all"
               >
-                Go Back to Questions
+                Go Back to Review
               </button>
             </div>
           </div>
@@ -189,6 +190,15 @@ const ExamPage = ({
             {(timeLeft % 60).toString().padStart(2, "0")}
           </span>
         </div>
+
+        {tabSwitchCount > 0 && (
+          <div className="flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-100 text-red-600 rounded-lg text-[10px] font-bold uppercase tracking-tighter animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Tab Switches: {tabSwitchCount}/3
+          </div>
+        )}
       </div>
 
       {/* Progress & Pagination */}
@@ -212,31 +222,35 @@ const ExamPage = ({
           ></div>
         </div>
 
-        {/* Question numbers grid */}
         <div className="flex flex-wrap gap-2 justify-center">
-          {Array.from({ length: totalQuestions }).map((_, idx) => {
+          {questions.map((q, idx) => {
             const isCurrent = idx === currentQuestionIndex;
-            const isFlagged = flaggedQuestions[idx + 1]; // Mocking using index+1 or real ID if available. Let's use idx+1 for now as a simple mock ID.
-            // Wait, we should use the actual question IDs. But questions are loaded in SubjectExam. 
-            // For simplicity in this mock, let's assume index alignment.
+            const isFlagged = flaggedQuestions[q.id];
+            const isAnswered = !!userAnswers[q.id];
 
             return (
               <button
-                key={idx}
+                key={q.id}
                 onClick={() => jumpToQuestionHandler && jumpToQuestionHandler(idx)}
                 className={`
-                  relative h-9 w-9 rounded-lg font-bold transition-all duration-200 text-xs
+                  relative h-10 w-10 rounded-xl font-bold transition-all duration-300 text-xs
                   ${isCurrent
-                    ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-300 scale-110"
-                    : "bg-white border border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-600"
+                    ? "bg-indigo-600 text-white shadow-lg ring-2 ring-indigo-300 scale-110 z-10"
+                    : isAnswered
+                      ? "bg-indigo-50 border-2 border-indigo-200 text-indigo-700"
+                      : "bg-white border-2 border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600"
                   }
                 `}
               >
                 {idx + 1}
                 {isFlagged && (
-                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                    <span className="relative inline-flex rounded-full h-4 w-4 bg-orange-500 border-2 border-white shadow-sm flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-2 w-2 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clipRule="evenodd" />
+                      </svg>
+                    </span>
                   </span>
                 )}
               </button>

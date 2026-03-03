@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
     Shield,
     Users,
@@ -14,12 +15,44 @@ import {
     PieChart,
     ArrowUpRight,
     UserCheck,
-    Menu
+    Menu,
+    LayoutDashboard,
+    Building2,
+    ShieldCheck,
+    Loader2
 } from "lucide-react";
 import { PRIMARY_TEXT } from "@/components/ui/colors";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const AdminDashboard = () => {
+    const { user, profile, loading, signOut } = useAuth();
+    const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!loading) {
+            if (!user) {
+                router.push("/auth/login");
+            } else if (profile && profile.role !== "admin") {
+                // Redirect if not admin
+                router.push("/dashboard");
+            }
+        }
+    }, [user, profile, loading, router]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+            </div>
+        );
+    }
+
+    if (!user) return null;
+
+    const displayName = profile?.full_name || user?.user_metadata?.full_name || "Admin";
+    const initials = displayName.split(" ").map(n => n[0]).join("").toUpperCase();
     const platformStats = [
         { label: "Total Schools", value: "42", icon: <Globe className="w-5 h-5" />, trend: "+4", color: "bg-blue-600" },
         { label: "Total Users", value: "8,240", icon: <Users className="w-5 h-5" />, trend: "+12%", color: "bg-indigo-600" },
@@ -63,23 +96,40 @@ const AdminDashboard = () => {
                     </button>
                 </div>
 
-                <nav className="space-y-2 flex-1">
-                    <button className="w-full flex items-center justify-between px-4 py-3 bg-white/10 text-white rounded-xl font-bold transition-all">
-                        <div className="flex items-center gap-3"><Activity className="w-5 h-5" /> Overview</div>
-                        <ArrowUpRight className="w-4 h-4 text-slate-500" />
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-semibold transition-all">
-                        <Globe className="w-5 h-5" /> School Management
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-semibold transition-all">
-                        <UserCheck className="w-5 h-5" /> Verification Requests
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-semibold transition-all">
-                        <Database className="w-5 h-5" /> System Logs
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-semibold transition-all">
-                        <Settings className="w-5 h-5" /> Configuration
-                    </button>
+                <nav className="space-y-1 flex-1">
+                    <Link href="/admin" className="block">
+                        <button className="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-bold">
+                            <LayoutDashboard className="w-5 h-5" /> Dashboard
+                        </button>
+                    </Link>
+                    <div className="relative group/nav">
+                        <Link href="/admin/schools" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <Building2 className="w-5 h-5" /> School Management
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="relative group/nav">
+                        <Link href="/admin/verifications" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <ShieldCheck className="w-5 h-5" /> Verification Requests
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="relative group/nav">
+                        <Link href="/admin/logs" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <Activity className="w-5 h-5" /> System Logs
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="relative group/nav">
+                        <Link href="/admin/settings" className="block">
+                            <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-semibold transition-colors">
+                                <Settings className="w-5 h-5" /> Configuration
+                            </button>
+                        </Link>
+                    </div>
                 </nav>
 
                 <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
@@ -88,6 +138,15 @@ const AdminDashboard = () => {
                         <span className="text-xs font-bold text-white">System Healthy</span>
                     </div>
                     <p className="text-[10px] text-slate-500 font-medium">Backup completed: 2h ago</p>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-white/10">
+                    <button
+                        onClick={signOut}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-xl font-bold transition-all"
+                    >
+                        <Shield className="w-5 h-5 rotate-180" /> Sign Out
+                    </button>
                 </div>
             </aside>
 
@@ -113,8 +172,8 @@ const AdminDashboard = () => {
                             <span className="absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
                         </button>
                         <div className="flex items-center gap-3 bg-white px-4 py-2 border border-slate-200 rounded-xl shadow-sm">
-                            <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center font-bold text-indigo-600 text-xs">AD</div>
-                            <span className="text-sm font-bold text-slate-700">Root Admin</span>
+                            <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center font-bold text-indigo-600 text-xs">{initials}</div>
+                            <span className="text-sm font-bold text-slate-700">{displayName}</span>
                         </div>
                     </div>
                 </header>
